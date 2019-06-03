@@ -27,7 +27,7 @@ class Episode:
         row = c.fetchone()
 
         self.id          = row['id']
-        #self.feed        = feed.Feed(row['feedID']) # TODO: make sure this doesn't blow shit up
+        self.feed        = feed.Feed(row['feedID'])
         self.guid        = row['guid']
         self.url         = row['url']
         self.title       = row['title']
