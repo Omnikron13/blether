@@ -95,6 +95,12 @@ class Feed:
         c.execute(sql)
         return tuple(Feed(x['id']) for x in c.fetchall())
 
+    @staticmethod
+    def maxtitlelength():
+        sql = 'SELECT MAX(LENGTH(title)) FROM feeds;'
+        c = db.connection.execute(sql)
+        return c.fetchone()[0]
+
 
     def update(self):
         """
