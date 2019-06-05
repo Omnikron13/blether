@@ -1,0 +1,3 @@
+feedparser==5.2.1
+python-vlc==3.0.6109
+urwid==2.0.1
