@@ -2,12 +2,15 @@ import urwid
 
 
 class SelectionList(urwid.ListBox):
-    def __init__(self, attr, focussed_attr, selected_attr, items = None):
+    def __init__(self, attr, focussed_attr, selected_attr, items = None, mousescroll=4):
         self.attr = attr
         self.focussed_attr = focussed_attr
         self.selected_attr = selected_attr
         self.listwalker = urwid.SimpleFocusListWalker([])
+        self.mousescroll = mousescroll
+
         super().__init__(self.listwalker)
+
         self.selected = None
 
         def modified():
@@ -27,6 +30,20 @@ class SelectionList(urwid.ListBox):
         else: # assume iterable; add many
             for i in text:
                 self.add(i[0], i[1])
+
+    def mouse_event(self, size, event, button, col, row, focus):
+        """
+        Mouse events are captured to process scroll-wheel scrolling.
+        """
+        if button not in (4, 5):
+            print('WTF')
+            return super(SelectionList, self).mouse_event(size, event, button, col, row, focus)
+        if button == 4.0:
+            for x in range(self.mousescroll):
+                self._keypress_up(size)
+        if button == 5.0:
+            for x in range(self.mousescroll):
+                self._keypress_down(size)
 
     class SelectableRow(urwid.AttrMap):
         class SelectableText(urwid.Text):
