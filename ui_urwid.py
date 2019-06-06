@@ -89,6 +89,7 @@ class UI:
     @classmethod
     def _feeds_modified_cb(cls):
         cls.episodes_list.clear()
+        # TODO: add support for special non-id entries (like e.g. 'All')
         f = Feed(cls.feeds_list.focus.data)
         episodes = tuple((e.title, e.id) for e in Episode.getbyfeed(f))
         cls.episodes_list.add(episodes)
