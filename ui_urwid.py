@@ -34,7 +34,12 @@ class UI:
 
     @classmethod
     def runloop(cls):
-        urwid.MainLoop(cls.main_widget, cls.palette, unhandled_input=cls.handle_input).run()
+        cls.loop = urwid.MainLoop(
+            cls.main_widget,
+            cls.palette,
+            unhandled_input=cls.handle_input
+        )
+        cls.loop.run()
 
     @classmethod
     def _construct_feeds(cls):
