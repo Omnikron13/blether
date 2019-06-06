@@ -38,6 +38,19 @@ class SelectionList(urwid.ListBox):
         """
         self.listwalker.clear()
 
+    def pack(self, size, focus=False):
+        """
+        Calculates packing size based on that of the children.
+        Columns is the max() column size of the children, rows is the sum.
+        """
+        col = 0
+        row = 0
+        for x in self.listwalker:
+            p = x.pack(size)
+            col = max(col, p[0])
+            row += p[1]
+        return col, row
+
     def mouse_event(self, size, event, button, col, row, focus):
         """
         Mouse events are captured to process scroll-wheel scrolling.
