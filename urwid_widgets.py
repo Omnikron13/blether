@@ -86,3 +86,45 @@ class PackableLineBox(urwid.LineBox):
     def pack(self, size=None, focus=False):
         s = self.original_widget.pack(size, focus)
         return max(s[0], len(self.title_widget.text)+4), s[1]+1
+
+
+class EditDialogue(urwid.Overlay):
+    def __init__(self, title, loop, ok_callback,
+        text='',
+        align='center',
+        width=('relative', 80),
+        valign='middle',
+        height=5,
+    ):
+        self._loop = loop
+        self._main_widget = loop.widget
+
+        def dismiss(button):
+            self._loop.widget = self._main_widget
+
+        edit = urwid.Edit(edit_text=text)
+
+        def ok_callback_wrapper(button, args):
+            dismiss(button)
+            ok_callback(edit.text)
+
+        ok = urwid.Button('Ok', ok_callback_wrapper, edit)
+        ok._label.align = 'center'
+
+        cancel = urwid.Button('Cancel', dismiss)
+        cancel._label.align = 'center'
+
+        buttons= urwid.Columns((ok, cancel), 10)
+        pile = urwid.Pile((edit, buttons))
+        box = urwid.LineBox(urwid.Filler(pile), title)
+        super().__init__(
+            box,
+            self._loop.widget,
+            align,
+            width,
+            valign,
+            height,
+        )
+
+    def display(self):
+        self._loop.widget = self
