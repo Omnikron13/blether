@@ -45,6 +45,12 @@ class UI:
             tlcorner='─',
             trcorner='─'
         )
+        # Selecting a different feed needs to update the episode list
+        urwid.connect_signal(
+            cls.feeds_list.listwalker,
+            'modified',
+            cls._feeds_modified_cb
+        )
 
     @classmethod
     def _construct_episodes(cls):
@@ -69,6 +75,13 @@ class UI:
             tlcorner='─',
             trcorner='─'
         )
+
+    @classmethod
+    def _feeds_modified_cb(cls):
+        cls.episodes_list.clear()
+        f = Feed(cls.feeds_list.focus.data)
+        episodes = tuple((e.title, e.id) for e in Episode.getbyfeed(f))
+        cls.episodes_list.add(episodes)
 
     @staticmethod
     def handle_input(i):
