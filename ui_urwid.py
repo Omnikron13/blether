@@ -1,7 +1,7 @@
 from functools import reduce
 
 import urwid
-from urwid_widgets import SelectionList
+from urwid_widgets import SelectionList, PackableLineBox
 
 from feed import Feed
 from episode import Episode
@@ -22,9 +22,7 @@ class UI:
         cls._construct_episodes()
         cls._construct_information()
 
-        # TODO: this needs to be more dynamic if, e.g, new feeds are added
-        mx = Feed.maxtitlelength()
-        columns = urwid.Columns(((mx, cls.feeds_box), cls.episodes_box))
+        columns = urwid.Columns((('pack', cls.feeds_box), cls.episodes_box))
         pile = urwid.Pile((columns, (8, cls.information_box)))
 
         cls.main_widget = pile
@@ -42,7 +40,7 @@ class UI:
     def _construct_feeds(cls):
         f = tuple((f.title, f.id) for f in Feed.getall())
         cls.feeds_list = SelectionList('norm', 'focussed', 'selected', f)
-        cls.feeds_box = urwid.LineBox(
+        cls.feeds_box = PackableLineBox(
             cls.feeds_list,
             'Feeds',
             lline=None,
