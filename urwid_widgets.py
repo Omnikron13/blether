@@ -32,6 +32,9 @@ class SelectionList(urwid.ListBox):
                 self.add(i[0], i[1])
 
     def clear(self):
+        """
+        Clears the list held in the underlying list walker
+        """
         self.listwalker.clear()
 
     def mouse_event(self, size, event, button, col, row, focus):
