@@ -22,6 +22,7 @@ class UI:
         cls._construct_episodes()
         cls._construct_information()
 
+        # TODO: this needs to be more dynamic if, e.g, new feeds are added
         mx = Feed.maxtitlelength()
         columns = urwid.Columns(((mx, cls.feeds_box), cls.episodes_box))
         pile = urwid.Pile((columns, (8, cls.information_box)))
