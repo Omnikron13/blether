@@ -28,6 +28,11 @@ class UI:
 
         cls.main_widget = pile
 
+        # Without this the episode list starts blank rather than being
+        # populated from the first feed in the feeds list.
+        # TODO: move into SelectionList method?
+        urwid.signals.emit_signal(cls.feeds_list.listwalker, 'modified')
+
     @classmethod
     def runloop(cls):
         urwid.MainLoop(cls.main_widget, cls.palette, unhandled_input=cls.handle_input).run()
