@@ -17,7 +17,8 @@ class SelectionList(urwid.ListBox):
             if self.selected:
                 self.selected.set_attr_map({None: self.attr})
             self.selected = self.focus
-            self.selected.set_attr_map({None: self.selected_attr})
+            if self.selected:
+                self.selected.set_attr_map({None: self.selected_attr})
 
         urwid.connect_signal(self.listwalker, 'modified', modified)
         if items:
