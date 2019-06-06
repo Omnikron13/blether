@@ -85,4 +85,4 @@ class PackableLineBox(urwid.LineBox):
     # TODO: calculate amount of padding needed by sides being used
     def pack(self, size=None, focus=False):
         s = self.original_widget.pack(size, focus)
-        return s[0], s[1]+1
+        return max(s[0], len(self.title_widget.text)+4), s[1]+1
