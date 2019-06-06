@@ -79,3 +79,10 @@ class SelectionList(urwid.ListBox):
             si = self.SelectableText(text)
             super().__init__(si, attr, focus_map=focus)
             self.data = data
+
+
+class PackableLineBox(urwid.LineBox):
+    # TODO: calculate amount of padding needed by sides being used
+    def pack(self, size=None, focus=False):
+        s = self.original_widget.pack(size, focus)
+        return s[0], s[1]+1
