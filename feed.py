@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import datetime
 
 import feedparser
@@ -64,7 +65,7 @@ class Feed:
 
 
     @staticmethod
-    def add(url: str) -> 'Feed': # TODO: annotate better in python 4
+    def add(url: str) -> Feed:
         """
         Add new feed to the db
         :param url: RSS feed url to add
@@ -85,7 +86,7 @@ class Feed:
 
 
     @staticmethod
-    def getall() -> Tuple['Feed']:
+    def getall() -> Tuple[Feed]:
         """
         Get all feeds currently in the db
         :return: All current feeds

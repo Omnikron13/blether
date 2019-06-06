@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import datetime
 from time import mktime
 
@@ -10,7 +11,7 @@ from typing import Union, Optional, Tuple
 class Episode:
     def __init__(self, id: Union[int, str]):
         self.id          : int
-        self.feed        : 'feed.Feed'
+        self.feed        : feed.Feed
         self.guid        : str
         self.url         : str
         self.title       : str
@@ -40,7 +41,7 @@ class Episode:
 
 
     @staticmethod
-    def add(rss, parent) -> Optional['Episode']:
+    def add(rss, parent) -> Optional[Episode]:
         sql = '''
             INSERT OR IGNORE INTO
             episodes(feedID, guid, url, title, description, published)
@@ -73,7 +74,7 @@ class Episode:
 
 
     @staticmethod
-    def getbyfeed(f: 'feed.Feed') -> Tuple:
+    def getbyfeed(f: feed.Feed) -> Tuple:
         """
         Get a tuple of all the episodes from a given feed,
         in ascending order of the date they were published.
