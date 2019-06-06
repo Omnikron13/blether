@@ -1,8 +1,8 @@
 from functools import reduce
 
 import urwid
-from urwid_widgets import SelectionList, PackableLineBox
 
+from urwid_widgets import SelectionList, PackableLineBox
 from feed import Feed
 from episode import Episode
 
