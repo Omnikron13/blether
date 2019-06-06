@@ -68,6 +68,11 @@ class UI:
             tlcorner='┬',
             trcorner='─'
         )
+        urwid.connect_signal(
+            cls.episodes_list.listwalker,
+            'modified',
+            cls._episodes_modified_cb
+        )
 
     @classmethod
     def _construct_information(cls):
@@ -87,6 +92,10 @@ class UI:
         f = Feed(cls.feeds_list.focus.data)
         episodes = tuple((e.title, e.id) for e in Episode.getbyfeed(f))
         cls.episodes_list.add(episodes)
+
+    @classmethod
+    def _episodes_modified_cb(cls):
+        pass
 
     @staticmethod
     def handle_input(i):
