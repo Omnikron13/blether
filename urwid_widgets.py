@@ -31,6 +31,9 @@ class SelectionList(urwid.ListBox):
             for i in text:
                 self.add(i[0], i[1])
 
+    def clear(self):
+        self.listwalker.clear()
+
     def mouse_event(self, size, event, button, col, row, focus):
         """
         Mouse events are captured to process scroll-wheel scrolling.
