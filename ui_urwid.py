@@ -48,6 +48,15 @@ class UI:
         cls.loop.run()
 
     @classmethod
+    def infodialogue(cls, title, message):
+        InformationDialogue(
+            title,
+            message,
+            cls.loop,
+            attr='reversed',
+        ).display()
+
+    @classmethod
     def _construct_feeds(cls):
         f = tuple((f.title, f.id) for f in Feed.getall())
         cls.feeds_list = SelectionList('norm', 'focussed', 'selected', f)
