@@ -148,8 +148,11 @@ class InformationDialogue(urwid.Overlay):
         ok = urwid.Button('Ok', dismiss)
         ok._label.align = 'center'
 
-        pile = urwid.Pile((message, ok))
-        box = urwid.LineBox(urwid.Filler(pile), title)
+        fill = urwid.Filler(message, top=1)
+        pad = urwid.Padding(ok, align='center', width=10)
+        pile = urwid.Pile((fill, ('pack', pad)))
+        box = urwid.LineBox(pile, title)
+
         super().__init__(
             box,
             self._loop.widget,
