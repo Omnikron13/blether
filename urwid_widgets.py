@@ -135,7 +135,6 @@ class InformationDialogue(urwid.Overlay):
                  align='center',
                  width=48,
                  valign='middle',
-                 height=12,
                  ):
         self._loop = loop
         self._main_widget = loop.widget
