@@ -95,6 +95,8 @@ class EditDialogue(urwid.Overlay):
         width=('relative', 80),
         valign='middle',
         height=4,
+        attr=None,
+        edit_attr=None,
     ):
         self._loop = loop
         self._main_widget = loop.widget
@@ -104,6 +106,7 @@ class EditDialogue(urwid.Overlay):
 
         edit = urwid.Edit(edit_text=text)
         edit_container = urwid.BoxAdapter(urwid.Filler(edit), 1)
+        edit_container = urwid.AttrMap(edit_container, edit_attr)
 
         def ok_callback_wrapper(button, args):
             dismiss(button)
@@ -120,6 +123,8 @@ class EditDialogue(urwid.Overlay):
         buttons= urwid.Columns((ok, cancel))
         pile = urwid.Pile((edit_container, buttons))
         box = urwid.LineBox(urwid.Filler(pile), title)
+        box = urwid.AttrMap(box, attr)
+
         super().__init__(
             box,
             self._loop.widget,
