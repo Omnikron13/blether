@@ -134,7 +134,14 @@ class Feed:
         """
         Re-download and parse the RSS file, updating local db accordingly.
         """
-        self._rss = feedparser.parse(self.url)
+        self._rss = feedparser.parse(self.url, etag=self.etag)
+
+        # HTTP 304 - Not Modified
+        if self._rss.status is 304:
+            self.updated = datetime.utcnow()
+            sql = 'UPDATE feeds SET updated=? WHERE id=?;'
+            db.connection.execute(sql, (self.updated.timestamp(), self.id))
+            return
 
         # This will throw if the rss is malformed, but also if the url is junk
         # or the url doesn't point to an rss feed, etc.
