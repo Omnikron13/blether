@@ -1,5 +1,6 @@
 from __future__ import annotations
 from datetime import datetime
+from urllib.request import urlopen
 
 import feedparser
 
@@ -41,6 +42,8 @@ class Feed:
         self.url      : str
         self.title    : str
         self.subtitle : Optional[str]
+        self.cached   : str
+        self.etag     : str
         self.episodes : Tuple
 
         self._updated : Optional[datetime]
@@ -54,10 +57,12 @@ class Feed:
         self.url      = row['url']
         self.title    = row['title']
         self.subtitle = row['subtitle']
+        self.cached   = row['cached']
+        self.etag     = row['etag']
         self.updated  = row['updated']
         self.episodes = Episode.getbyfeed(self)
 
-        self._rss = None
+        self._rss = feedparser.parse(self.cached)
 
 
     def __str__(self):
@@ -71,11 +76,33 @@ class Feed:
         :param url: RSS feed url to add
         :return: Feed object
         """
-        sql = 'INSERT INTO feeds(url) VALUES(?);'
+
+        # First we ensure we're not duplicating anything, checking the db
+        # first rather than wasting bandwidth
+        sql = 'SELECT COUNT(*) FROM feeds WHERE url=?;'
+        count = db.connection.execute(sql, (url,)).fetchone()[0]
+        if count:
+            # TODO: replace with custom exception
+            raise Exception('URL already in feed table in db')
+
+        # The raw rss data will be cached so it can be re-parsed without downloading
+        # again if etag/modified checks show we have the latest version
+        raw = urlopen(url).read()
+        rss = feedparser.parse(raw)
+
+        # This will throw if the rss is malformed, but also if the url is junk
+        # or the url doesn't point to an rss feed, etc.
+        # TODO: raise Feed custom exception instead
+        if rss.bozo:
+            raise rss.bozo_exception
+
+        etag = rss.etag if hasattr(rss, 'etag') else None
+
+        sql = 'INSERT INTO feeds(url, title, subtitle, cached, etag) VALUES(?,?,?,?,?);'
         c = db.cursor()
-        c.execute(sql, (url,))
+        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, raw, etag))
         f = Feed(c.lastrowid)
-        f.update()
+        f._update_episodes()
         return f
 
 
