@@ -108,6 +108,11 @@ class Feed:
         Re-download and parse the RSS file, updating local db accordingly.
         """
         self._rss = feedparser.parse(self.url)
+
+        # This will throw if the rss is malformed, but also if the url is junk
+        # or the url doesn't point to an rss feed, etc.
+        if self._rss.bozo:
+            raise self._rss.bozo_exception
         self.title = self._rss.feed.title
         self.subtitle = self._rss.feed.subtitle
         self.updated = datetime.utcnow()
