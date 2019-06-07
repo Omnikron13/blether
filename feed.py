@@ -148,6 +148,7 @@ class Feed:
         # TODO: raise Feed custom exception instead
         if self._rss.bozo:
             raise self._rss.bozo_exception
+
         self.title = self._rss.feed.title
         self.subtitle = self._rss.feed.subtitle
         self.updated = datetime.utcnow()
