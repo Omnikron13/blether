@@ -118,9 +118,7 @@ class Feed:
         self.subtitle = self._rss.feed.subtitle
         self.updated = datetime.utcnow()
 
-        for entry in self._rss.entries:
-            Episode.add(entry, self)
-        self.episodes = Episode.getbyfeed(self)
+        self._update_episodes()
 
         sql = 'UPDATE feeds SET title=?, subtitle=?, updated=? WHERE id=?;'
         values = (
@@ -134,6 +132,12 @@ class Feed:
         c.execute(sql, values)
 
         db.connection.commit()
+
+
+    def _update_episodes(self):
+        for entry in self._rss.entries:
+            Episode.add(entry, self)
+        self.episodes = Episode.getbyfeed(self)
 
 
 Feed._loadfeeds()
