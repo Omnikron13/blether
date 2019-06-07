@@ -7,6 +7,8 @@ from episode import Episode
 from urwid_widgets import(
     SelectionList,
     PackableLineBox,
+    EditDialogue,
+    InformationDialogue,
 )
 
 
