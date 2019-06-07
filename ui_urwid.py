@@ -10,6 +10,7 @@ from episode import Episode
 class UI:
     palette = (
         ('normal',   'light gray', 'black',      'default'),
+        ('reversed', 'black',      'light gray', 'default'),
         ('selected', 'black',      'dark blue',  'default'),
         ('focussed', 'black',      'light blue', 'default'),
     )
