@@ -148,7 +148,7 @@ class InformationDialogue(urwid.Overlay):
         ok = urwid.Button('Ok', dismiss)
         ok._label.align = 'center'
 
-        fill = urwid.Filler(message, top=1)
+        fill = urwid.Filler(message)
         pad = urwid.Padding(ok, align='center', width=10)
         pile = urwid.Pile((fill, ('pack', pad)))
         box = urwid.LineBox(pile, title)
@@ -161,7 +161,8 @@ class InformationDialogue(urwid.Overlay):
             align,
             width,
             valign,
-            height,
+            # height needed by message, plus 3 for buttons & linebox
+            message.pack((width,))[1] + 3
         )
 
     def display(self):
