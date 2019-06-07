@@ -153,6 +153,8 @@ class InformationDialogue(urwid.Overlay):
         pile = urwid.Pile((fill, ('pack', pad)))
         box = urwid.LineBox(pile, title)
 
+        # TODO: try scaling height based on the messages pack() output
+
         super().__init__(
             box,
             self._loop.widget,
