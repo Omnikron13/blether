@@ -128,3 +128,36 @@ class EditDialogue(urwid.Overlay):
 
     def display(self):
         self._loop.widget = self
+
+
+class InformationDialogue(urwid.Overlay):
+    def __init__(self, title, message, loop,
+                 align='center',
+                 width=48,
+                 valign='middle',
+                 height=12,
+                 ):
+        self._loop = loop
+        self._main_widget = loop.widget
+
+        message = urwid.Text(message)
+
+        def dismiss(button):
+            self._loop.widget = self._main_widget
+
+        ok = urwid.Button('Ok', dismiss)
+        ok._label.align = 'center'
+
+        pile = urwid.Pile((message, ok))
+        box = urwid.LineBox(urwid.Filler(pile), title)
+        super().__init__(
+            box,
+            self._loop.widget,
+            align,
+            width,
+            valign,
+            height,
+        )
+
+    def display(self):
+        self._loop.widget = self
