@@ -135,6 +135,7 @@ class InformationDialogue(urwid.Overlay):
                  align='center',
                  width=48,
                  valign='middle',
+                 attr=None,
                  ):
         self._loop = loop
         self._main_widget = loop.widget
@@ -151,6 +152,7 @@ class InformationDialogue(urwid.Overlay):
         pad = urwid.Padding(ok, align='center', width=10)
         pile = urwid.Pile((fill, ('pack', pad)))
         box = urwid.LineBox(pile, title)
+        box = urwid.AttrMap(box, attr)
 
         # TODO: try scaling height based on the messages pack() output
 
