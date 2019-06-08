@@ -56,7 +56,7 @@ class SelectionList(urwid.ListBox):
         Mouse events are captured to process scroll-wheel scrolling.
         """
         if button not in (4, 5):
-            return super(SelectionList, self).mouse_event(size, event, button, col, row, focus)
+            return super().mouse_event(size, event, button, col, row, focus)
         if button == 4.0:
             for x in range(self.mousescroll):
                 self._keypress_up(size)
