@@ -29,7 +29,7 @@ class UI:
         cls._construct_information()
 
         columns = urwid.Columns((('pack', cls.feeds_box), cls.episodes_box))
-        pile = urwid.Pile((columns, (8, cls.information_box)))
+        pile = MainWidget((columns, (8, cls.information_box)))
 
         cls.main_widget = pile
 
@@ -133,3 +133,7 @@ class UI:
     def handle_input(i):
         if i in ('q', 'Q', 'esc'):
             raise urwid.ExitMainLoop
+
+
+class MainWidget(urwid.Pile):
+    pass
