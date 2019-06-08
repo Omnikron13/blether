@@ -131,9 +131,14 @@ class UI:
 
     @staticmethod
     def handle_input(i):
-        if i in ('q', 'Q', 'esc'):
-            raise urwid.ExitMainLoop
+        pass
 
 
 class MainWidget(urwid.Pile):
-    pass
+    def keypress(self, size, key):
+        if key in ('q', 'Q', 'esc'):
+            raise urwid.ExitMainLoop
+        elif key in ('a', 'A'):
+            UI.addfeeddialogue()
+        else:
+            return super().keypress(size, key)
