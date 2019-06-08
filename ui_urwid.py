@@ -48,6 +48,16 @@ class UI:
         cls.loop.run()
 
     @classmethod
+    def addfeeddialogue(cls):
+        EditDialogue(
+            'Edit Test',
+            UI.loop,
+            lambda t: UI.addfeed(t),
+            attr='reversed',
+            edit_attr='normal',
+        ).display()
+
+    @classmethod
     def infodialogue(cls, title, message):
         InformationDialogue(
             title,
