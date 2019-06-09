@@ -169,7 +169,7 @@ class InformationDialogue(urwid.Overlay):
             width,
             valign,
             # height needed by message, plus 3 for buttons & linebox
-            message.pack((width,))[1] + 3
+            message.pack((width-2,))[1] + 3
         )
 
     def display(self):
