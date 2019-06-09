@@ -82,8 +82,7 @@ class Feed:
         sql = 'SELECT COUNT(*) FROM feeds WHERE url=?;'
         count = db.connection.execute(sql, (url,)).fetchone()[0]
         if count:
-            # TODO: replace with custom exception
-            raise Exception('URL already in feed table in db')
+            raise Feed.Error('URL already in feed table in db')
 
         # The raw rss data will be cached so it can be re-parsed without downloading
         # again if etag/modified checks show we have the latest version
@@ -92,9 +91,10 @@ class Feed:
 
         # This will throw if the rss is malformed, but also if the url is junk
         # or the url doesn't point to an rss feed, etc.
-        # TODO: raise Feed custom exception instead
         if rss.bozo:
-            raise rss.bozo_exception
+            raise Feed.Error(
+                'There was an error parsing the given feed, and it could not be added'
+            ) from rss.bozo_exception
 
         etag = rss.etag if hasattr(rss, 'etag') else None
 
