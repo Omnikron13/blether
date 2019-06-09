@@ -1,6 +1,7 @@
 from __future__ import annotations
 from datetime import datetime
 from urllib.request import urlopen
+from urllib.error import HTTPError
 
 import feedparser
 
@@ -86,7 +87,12 @@ class Feed:
 
         # The raw rss data will be cached so it can be re-parsed without downloading
         # again if etag/modified checks show we have the latest version
-        raw = urlopen(url).read()
+        try:
+            raw = urlopen(url).read()
+        except ValueError:
+            raise Feed.Error('The given input did not appear to be a valid URL')
+        except HTTPError:
+            raise Feed.Error('There was an HTTP error trying to download the feed')
         rss = feedparser.parse(raw)
 
         # This will throw if the rss is malformed, but also if the url is junk
