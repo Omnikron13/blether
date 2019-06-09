@@ -175,4 +175,8 @@ class Feed:
         self.episodes = Episode.getbyfeed(self)
 
 
+    class Error(Exception):
+        pass
+
+
 Feed._loadfeeds()
