@@ -58,6 +58,17 @@ class UI:
         ).display()
 
     @classmethod
+    def addfeed(cls, url):
+        try:
+            f = Feed.add(url)
+            cls.feeds_list.add(f.title, f.id)
+        except Feed.Error as e:
+            cls.infodialogue(
+                'Error Adding Feed',
+                e.__str__(),
+            )
+
+    @classmethod
     def infodialogue(cls, title, message):
         InformationDialogue(
             title,
