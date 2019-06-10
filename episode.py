@@ -20,7 +20,7 @@ class Episode(metaclass=Unique):
         self.url         : str
         self.title       : str
         self.description : Optional[str]
-        self.published   : datetime
+        self._published  : datetime
 
         sql = 'SELECT * FROM episodes WHERE id=?;'
 
@@ -34,7 +34,19 @@ class Episode(metaclass=Unique):
         self.url         = row['url']
         self.title       = row['title']
         self.description = row['description']
-        self.published   = datetime.fromtimestamp(row['published'])
+        self.published   = row['published']
+
+
+    @property
+    def published(self):
+        return self._published
+
+    @published.setter
+    def published(self, v: Union[int, datetime]):
+        if isinstance(v, int):
+            self._published = datetime.fromtimestamp(v)
+        else:
+            self._published = v
 
 
     def __str__(self):
