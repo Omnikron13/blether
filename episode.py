@@ -9,6 +9,7 @@ from unique import Unique
 from typing import(
     Optional,
     Tuple,
+    Union,
 )
 
 
