@@ -7,13 +7,12 @@ import feedparser
 
 import db
 from episode import Episode
+from unique import Unique
 
 from typing import Union, Optional, Tuple
 
 
-class Feed:
-    _feeds = dict()
-
+class Feed(metaclass=Unique):
     @property
     def updated(self):
         return self._updated
@@ -26,19 +25,7 @@ class Feed:
             self._updated = v
 
 
-    def __new__(cls, id):
-        if id in cls._feeds.keys():
-            return cls._feeds[id]
-        f = super(Feed, cls).__new__(cls)
-        cls._feeds[id] = f
-        return f
-
-
     def __init__(self, id):
-        # Skip init if already done, which is the case when avoiding duplication
-        if hasattr(self, 'id'):
-            return
-
         self.id       : int
         self.url      : str
         self.title    : str
@@ -112,12 +99,6 @@ class Feed:
         return f
 
 
-    @classmethod
-    def _loadfeeds(cls):
-        """Fills _feeds dictionary from db. Intended to be called once on startup."""
-        cls._feeds = {f.id:f for f in Feed.getall()}
-
-
     @staticmethod
     def getall() -> Tuple[Feed]:
         """
@@ -183,6 +164,3 @@ class Feed:
 
     class Error(Exception):
         pass
-
-
-Feed._loadfeeds()

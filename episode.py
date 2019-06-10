@@ -4,11 +4,12 @@ from time import mktime
 
 import db
 import feed
+from unique import Unique
 
-from typing import Union, Optional, Tuple
+from typing import Optional, Tuple
 
 
-class Episode:
+class Episode(metaclass=Unique):
     def __init__(self, id: int):
         self.id          : int
         self.feed        : feed.Feed
