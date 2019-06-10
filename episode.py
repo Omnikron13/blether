@@ -16,7 +16,7 @@ from typing import(
 class Episode(metaclass=Unique):
     def __init__(self, id: int):
         self.id          : int
-        self.feed        : feed.Feed
+        self._feed       : int
         self.guid        : str
         self.url         : str
         self.title       : str
@@ -30,13 +30,17 @@ class Episode(metaclass=Unique):
         row = c.fetchone()
 
         self.id          = row['id']
-        self.feed        = feed.Feed(row['feedID'])
+        self._feed       = row['feedID']
         self.guid        = row['guid']
         self.url         = row['url']
         self.title       = row['title']
         self.description = row['description']
         self.published   = row['published']
 
+
+    @property
+    def feed(self):
+        return feed.Feed(self._feed)
 
     @property
     def published(self):
