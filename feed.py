@@ -9,7 +9,11 @@ import db
 from episode import Episode
 from unique import Unique
 
-from typing import Union, Optional, Tuple
+from typing import(
+    Union,
+    Optional,
+    Tuple,
+)
 
 
 class Feed(metaclass=Unique):

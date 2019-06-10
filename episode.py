@@ -6,7 +6,10 @@ import db
 import feed
 from unique import Unique
 
-from typing import Optional, Tuple
+from typing import(
+    Optional,
+    Tuple,
+)
 
 
 class Episode(metaclass=Unique):
