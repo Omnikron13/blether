@@ -9,7 +9,7 @@ from typing import Union, Optional, Tuple
 
 
 class Episode:
-    def __init__(self, id: Union[int, str]):
+    def __init__(self, id: int):
         self.id          : int
         self.feed        : feed.Feed
         self.guid        : str
@@ -18,10 +18,7 @@ class Episode:
         self.description : Optional[str]
         self.published   : datetime
 
-        if isinstance(id, int):
-            sql = 'SELECT * FROM episodes WHERE id=?;'
-        else:
-            sql = 'SELECT * FROM episodes WHERE guid=?;'
+        sql = 'SELECT * FROM episodes WHERE id=?;'
 
         c = db.connection.cursor()
         c.execute(sql, (id,))
