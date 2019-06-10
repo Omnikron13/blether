@@ -24,7 +24,6 @@ class Feed(metaclass=Unique):
         self.subtitle : Optional[str]
         self.cached   : str
         self.etag     : str
-        self.episodes : Tuple
 
         self._updated : Optional[datetime]
         self._rss     : Optional[feedparser.FeedParserDict]
@@ -40,7 +39,6 @@ class Feed(metaclass=Unique):
         self.cached   = row['cached']
         self.etag     = row['etag']
         self.updated  = row['updated']
-        self.episodes = Episode.getbyfeed(self)
 
         self._rss = feedparser.parse(self.cached)
 
@@ -55,6 +53,10 @@ class Feed(metaclass=Unique):
             self._updated = datetime.fromtimestamp(v)
         else:
             self._updated = v
+
+    @property
+    def episodes(self):
+        return Episode.getbyfeed(self)
 
 
     def __str__(self):
@@ -163,7 +165,6 @@ class Feed(metaclass=Unique):
     def _update_episodes(self):
         for entry in self._rss.entries:
             Episode.add(entry, self)
-        self.episodes = Episode.getbyfeed(self)
 
 
     class Error(Exception):
