@@ -17,18 +17,6 @@ from typing import(
 
 
 class Feed(metaclass=Unique):
-    @property
-    def updated(self):
-        return self._updated
-
-    @updated.setter
-    def updated(self, v: Union[int, datetime, None]):
-        if isinstance(v, int):
-            self._updated = datetime.fromtimestamp(v)
-        else:
-            self._updated = v
-
-
     def __init__(self, id):
         self.id       : int
         self.url      : str
@@ -55,6 +43,18 @@ class Feed(metaclass=Unique):
         self.episodes = Episode.getbyfeed(self)
 
         self._rss = feedparser.parse(self.cached)
+
+
+    @property
+    def updated(self):
+        return self._updated
+
+    @updated.setter
+    def updated(self, v: Union[int, datetime, None]):
+        if isinstance(v, int):
+            self._updated = datetime.fromtimestamp(v)
+        else:
+            self._updated = v
 
 
     def __str__(self):
