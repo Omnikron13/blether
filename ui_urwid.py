@@ -99,7 +99,7 @@ class UI:
 
     @classmethod
     def _construct_episodes(cls):
-        cls.episodes_list = SelectionList('norm', 'focussed', 'selected')
+        cls.episodes_list = EpisodesList('norm', 'focussed', 'selected')
         cls.episodes_box = urwid.LineBox(
             cls.episodes_list,
             'Episodes',
@@ -153,3 +153,7 @@ class MainWidget(urwid.Pile):
             UI.addfeeddialogue()
         else:
             return super().keypress(size, key)
+
+
+class EpisodesList(SelectionList):
+    pass
