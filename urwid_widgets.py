@@ -1,5 +1,8 @@
 import urwid
 
+from typing import(
+    Tuple,
+)
 
 class SelectionList(urwid.ListBox):
     def __init__(self, attr, focussed_attr, selected_attr, items = None, mousescroll=4):
@@ -23,6 +26,10 @@ class SelectionList(urwid.ListBox):
         urwid.connect_signal(self.listwalker, 'modified', modified)
         if items:
             self.add(items)
+
+    @property
+    def data(self) -> Tuple:
+        return tuple(d.data for d in self.listwalker)
 
     def add(self, text, data = None):
         if isinstance(text, str):
