@@ -151,9 +151,15 @@ class MainWidget(urwid.Pile):
             raise urwid.ExitMainLoop
         elif key in ('a', 'A'):
             UI.addfeeddialogue()
+        elif key in ('p', 'P'):
+            p = Player()
+            p.play(Episode(UI.episodes_list.selected.data).url)
         else:
             return super().keypress(size, key)
 
 
 class EpisodesList(SelectionList):
-    pass
+    def display(self, episodes):
+        self.clear()
+        for e in episodes:
+            self.add(e.title, e.id)
