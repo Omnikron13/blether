@@ -10,6 +10,7 @@ from urwid_widgets import(
     EditDialogue,
     InformationDialogue,
 )
+from player import Player
 
 
 class UI:
