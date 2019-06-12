@@ -152,7 +152,7 @@ class MainWidget(urwid.Pile):
             UI.addfeeddialogue()
         elif key in ('p', 'P'):
             p = Player()
-            p.play(UI.episodes_list.selected.data.url)
+            p.play(UI.episodes_list.selected.data)
         else:
             return super().keypress(size, key)
 
