@@ -44,7 +44,7 @@ class UI:
         cls.loop = urwid.MainLoop(
             cls.main_widget,
             cls.palette,
-            unhandled_input=cls.handle_input
+            unhandled_input=cls.handle_input,
         )
         cls.loop.run()
 
