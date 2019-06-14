@@ -22,6 +22,7 @@ class Episode(metaclass=Unique):
         self.title       : str
         self.description : Optional[str]
         self._published  : datetime
+        self._played      : Optional[datetime]
 
         sql = 'SELECT * FROM episodes WHERE id=?;'
 
@@ -36,6 +37,7 @@ class Episode(metaclass=Unique):
         self.title       = row['title']
         self.description = row['description']
         self.published   = row['published']
+        self.played      = row['played']
 
 
     @property
@@ -52,6 +54,17 @@ class Episode(metaclass=Unique):
             self._published = datetime.fromtimestamp(v)
         else:
             self._published = v
+
+    @property
+    def played(self) -> Optional[datetime]:
+        return self._played
+
+    @played.setter
+    def played(self, v: Optional[Union[int, datetime]]):
+        if isinstance(v, int):
+            self._played = datetime.fromtimestamp(v)
+        else:
+            self._played = v
 
 
     def __str__(self):

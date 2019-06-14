@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS episodes(
     title       TEXT    NOT NULL,
     description TEXT,
     published   INTEGER NOT NULL,
+    played      INTEGER,
     FOREIGN KEY (feedID) REFERENCES feeds(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
