@@ -8,6 +8,7 @@ class Player(metaclass=Singleton):
     def __init__(self, loop):
         self.instance = vlc.Instance()
         self.player = self.instance.media_player_new()
+        self.events = self.player.event_manager()
         self.event_loop = loop
 
     def play(self, file):
