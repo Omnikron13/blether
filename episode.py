@@ -71,6 +71,13 @@ class Episode(metaclass=Unique):
         return self.title
 
 
+    def setplayed(self):
+        self.played = datetime.utcnow()
+        sql = 'UPDATE episodes SET played=? WHERE id=?;'
+        db.cursor().execute(sql, (self.played.timestamp(), self.id))
+        db.connection.commit()
+
+
     @staticmethod
     def add(rss, parent) -> Optional[Episode]:
         sql = '''
