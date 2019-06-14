@@ -21,6 +21,9 @@ class Player(metaclass=Singleton):
                 # vlc callbacks aren't 'reentrant' so we have to
                 # inject the real callback into the main loop
                 def defer_cb():
+                    # Tag the episode as played at current time(stamp), for future sorting etc.
+                    playlist[0].setplayed()
+
                     Player().play(playlist[1:])
 
                 self.event_loop.alarm(0, defer_cb)
