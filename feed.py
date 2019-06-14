@@ -102,6 +102,7 @@ class Feed(metaclass=Unique):
         c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, raw, etag))
         f = Feed(c.lastrowid)
         f._update_episodes()
+        db.connection.commit()
         return f
 
 
