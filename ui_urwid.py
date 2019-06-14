@@ -154,7 +154,9 @@ class MainWidget(urwid.Pile):
             UI.addfeeddialogue()
         elif key in ('p', 'P'):
             p = Player(UI.loop.event_loop)
-            p.play(UI.episodes_list.selected.data)
+            # Play from the selected episode to the last episode
+            i = UI.episodes_list.data.index(UI.episodes_list.selected.data)
+            p.play(UI.episodes_list.data[i:])
         else:
             return super().keypress(size, key)
 
