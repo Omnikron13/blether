@@ -44,6 +44,8 @@ class UI:
         cls.loop = urwid.MainLoop(
             cls.main_widget,
             cls.palette,
+            # This event loop plays nicer with vlc callbacks
+            event_loop=urwid.AsyncioEventLoop(),
             unhandled_input=cls.handle_input,
         )
         cls.loop.run()
