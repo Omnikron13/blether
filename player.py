@@ -5,9 +5,10 @@ from episode import Episode
 
 
 class Player(metaclass=Singleton):
-    def __init__(self):
+    def __init__(self, loop):
         self.instance = vlc.Instance()
         self.player = self.instance.media_player_new()
+        self.event_loop = loop
 
     def play(self, file):
         media = self.instance.media_new(file.url)
