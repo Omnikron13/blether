@@ -148,11 +148,11 @@ class UI:
 
 class MainWidget(urwid.Pile):
     def keypress(self, size, key):
-        if key in ('q', 'Q', 'esc'):
+        if key in ('q', 'esc'):
             raise urwid.ExitMainLoop
-        elif key in ('a', 'A'):
+        elif key is 'a':
             UI.addfeeddialogue()
-        elif key in ('p', 'P'):
+        elif key is 'p':
             p = Player(UI.loop.event_loop)
             # Play from the selected episode to the last episode
             i = UI.episodes_list.data.index(UI.episodes_list.selected.data)
