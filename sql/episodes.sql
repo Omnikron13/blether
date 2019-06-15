@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS episodes(
 
 CREATE INDEX IF NOT EXISTS episodes__feed_index ON episodes (feedID);
 
-CREATE INDEX IF NOT EXISTS episodes__published_index ON episodes (feedID);
+CREATE INDEX IF NOT EXISTS episodes__published_index ON episodes (published);
