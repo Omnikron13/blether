@@ -99,8 +99,8 @@ class Feed(metaclass=Unique):
                 'There was an error parsing the given feed, and it could not be added'
             ) from rss.bozo_exception
 
-        etag = rss.etag if hasattr(rss, 'etag') else None
-        modified = conn.info()['modified']
+        etag = conn.info()['ETag']
+        modified = conn.info()['last-modified']
 
         sql = 'INSERT INTO feeds(url, title, subtitle, cached, etag, modified) VALUES(?,?,?,?,?,?);'
         c = db.cursor()
