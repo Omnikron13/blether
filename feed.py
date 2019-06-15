@@ -24,6 +24,7 @@ class Feed(metaclass=Unique):
         self.subtitle : Optional[str]
         self.cached   : str
         self.etag     : str
+        self.modified : str
 
         self._updated : Optional[datetime]
         self._rss     : Optional[feedparser.FeedParserDict]
@@ -39,6 +40,7 @@ class Feed(metaclass=Unique):
         self.cached   = row['cached']
         self.etag     = row['etag']
         self.updated  = row['updated']
+        self.modified = row['modified']
 
         self._rss = feedparser.parse(self.cached)
 
@@ -81,7 +83,9 @@ class Feed(metaclass=Unique):
         # The raw rss data will be cached so it can be re-parsed without downloading
         # again if etag/modified checks show we have the latest version
         try:
-            raw = urlopen(url).read()
+            # conn is needed to read headers
+            conn = urlopen(url)
+            raw = conn.read()
         except ValueError:
             raise Feed.Error('The given input did not appear to be a valid URL')
         except HTTPError:
@@ -96,10 +100,11 @@ class Feed(metaclass=Unique):
             ) from rss.bozo_exception
 
         etag = rss.etag if hasattr(rss, 'etag') else None
+        modified = conn.info()['modified']
 
-        sql = 'INSERT INTO feeds(url, title, subtitle, cached, etag) VALUES(?,?,?,?,?);'
+        sql = 'INSERT INTO feeds(url, title, subtitle, cached, etag, modified) VALUES(?,?,?,?,?,?);'
         c = db.cursor()
-        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, raw, etag))
+        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, raw, etag, modified))
         f = Feed(c.lastrowid)
         f._update_episodes()
         db.connection.commit()
@@ -128,7 +133,7 @@ class Feed(metaclass=Unique):
         """
         Re-download and parse the RSS file, updating local db accordingly.
         """
-        self._rss = feedparser.parse(self.url, etag=self.etag)
+        self._rss = feedparser.parse(self.url, etag=self.etag, modified=self.modified)
 
         # HTTP 304 - Not Modified
         if self._rss.status is 304:
@@ -145,14 +150,18 @@ class Feed(metaclass=Unique):
 
         self.title = self._rss.feed.title
         self.subtitle = self._rss.feed.subtitle
+        self.etag = self._rss.etag if hasattr(self._rss, 'etag') else None
+        self.modified = self._rss.modified
         self.updated = datetime.utcnow()
 
         self._update_episodes()
 
-        sql = 'UPDATE feeds SET title=?, subtitle=?, updated=? WHERE id=?;'
+        sql = 'UPDATE feeds SET title=?, subtitle=?, etag=?, modified=?, updated=? WHERE id=?;'
         values = (
             self.title,
             self.subtitle,
+            self.etag,
+            self.modified,
             self.updated.timestamp(),
             self.id,
         )

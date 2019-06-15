@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS feeds(
     subtitle TEXT,
     cached   TEXT,
     etag     TEXT,
+    modified TEXT,
     updated  INTEGER
 );
