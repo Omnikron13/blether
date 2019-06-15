@@ -18,12 +18,12 @@ from typing import(
 
 class Feed(metaclass=Unique):
     def __init__(self, id):
-        self.id       : int
-        self.url      : str
-        self.title    : str
-        self.subtitle : Optional[str]
-        self.etag     : str
-        self.modified : str
+        self.id          : int
+        self.url         : str
+        self.title       : str
+        self.description : Optional[str]
+        self.etag        : str
+        self.modified    : str
 
         self._updated : Optional[datetime]
         self._rss     : Optional[feedparser.FeedParserDict]
@@ -32,13 +32,13 @@ class Feed(metaclass=Unique):
         c = db.connection.cursor()
         c.execute(sql, (id,))
         row = c.fetchone()
-        self.id       = row['id']
-        self.url      = row['url']
-        self.title    = row['title']
-        self.subtitle = row['subtitle']
-        self.etag     = row['etag']
-        self.updated  = row['updated']
-        self.modified = row['modified']
+        self.id          = row['id']
+        self.url         = row['url']
+        self.title       = row['title']
+        self.description = row['description']
+        self.etag        = row['etag']
+        self.updated     = row['updated']
+        self.modified    = row['modified']
 
         self._rss = None
 
@@ -98,9 +98,9 @@ class Feed(metaclass=Unique):
         etag = conn.info()['ETag']
         modified = conn.info()['last-modified']
 
-        sql = 'INSERT INTO feeds(url, title, subtitle, etag, modified) VALUES(?,?,?,?,?);'
+        sql = 'INSERT INTO feeds(url, title, description, etag, modified) VALUES(?,?,?,?,?);'
         c = db.cursor()
-        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, etag, modified))
+        c.execute(sql, (url, rss.feed.title, rss.feed.description, etag, modified))
         f = Feed(c.lastrowid)
         f._rss = rss
         f._update_episodes()
@@ -146,17 +146,17 @@ class Feed(metaclass=Unique):
             raise self._rss.bozo_exception
 
         self.title = self._rss.feed.title
-        self.subtitle = self._rss.feed.subtitle
+        self.description = self._rss.feed.description
         self.etag = self._rss.etag if hasattr(self._rss, 'etag') else None
         self.modified = self._rss.modified
         self.updated = datetime.utcnow()
 
         self._update_episodes()
 
-        sql = 'UPDATE feeds SET title=?, subtitle=?, etag=?, modified=?, updated=? WHERE id=?;'
+        sql = 'UPDATE feeds SET title=?, description=?, etag=?, modified=?, updated=? WHERE id=?;'
         values = (
             self.title,
-            self.subtitle,
+            self.description,
             self.etag,
             self.modified,
             self.updated.timestamp(),
