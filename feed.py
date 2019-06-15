@@ -1,7 +1,5 @@
 from __future__ import annotations
 from datetime import datetime
-from urllib.request import urlopen
-from urllib.error import HTTPError
 
 import feedparser
 
@@ -78,25 +76,18 @@ class Feed(metaclass=Unique):
         if count:
             raise Feed.Error('URL already in feed table in db')
 
-        try:
-            # conn is needed to read headers
-            conn = urlopen(url)
-            raw = conn.read()
-        except ValueError:
-            raise Feed.Error('The given input did not appear to be a valid URL')
-        except HTTPError:
-            raise Feed.Error('There was an HTTP error trying to download the feed')
-        rss = feedparser.parse(raw)
+        rss = feedparser.parse(url)
 
         # This will throw if the rss is malformed, but also if the url is junk
         # or the url doesn't point to an rss feed, etc.
+        # TODO: throw more fine-grained exceptions, or at least different descriptions
         if rss.bozo:
             raise Feed.Error(
                 'There was an error parsing the given feed, and it could not be added'
             ) from rss.bozo_exception
 
-        etag = conn.info()['ETag']
-        modified = conn.info()['last-modified']
+        etag = rss.etag if hasattr(rss, 'etag') else None
+        modified = rss.modified if hasattr(rss, 'modified') else None
 
         sql = 'INSERT INTO feeds(url, title, description, etag, modified) VALUES(?,?,?,?,?);'
         c = db.cursor()
