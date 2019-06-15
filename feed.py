@@ -22,7 +22,6 @@ class Feed(metaclass=Unique):
         self.url      : str
         self.title    : str
         self.subtitle : Optional[str]
-        self.cached   : str
         self.etag     : str
         self.modified : str
 
@@ -37,12 +36,11 @@ class Feed(metaclass=Unique):
         self.url      = row['url']
         self.title    = row['title']
         self.subtitle = row['subtitle']
-        self.cached   = row['cached']
         self.etag     = row['etag']
         self.updated  = row['updated']
         self.modified = row['modified']
 
-        self._rss = feedparser.parse(self.cached)
+        self._rss = None
 
 
     @property
@@ -80,8 +78,6 @@ class Feed(metaclass=Unique):
         if count:
             raise Feed.Error('URL already in feed table in db')
 
-        # The raw rss data will be cached so it can be re-parsed without downloading
-        # again if etag/modified checks show we have the latest version
         try:
             # conn is needed to read headers
             conn = urlopen(url)
@@ -102,10 +98,11 @@ class Feed(metaclass=Unique):
         etag = conn.info()['ETag']
         modified = conn.info()['last-modified']
 
-        sql = 'INSERT INTO feeds(url, title, subtitle, cached, etag, modified) VALUES(?,?,?,?,?,?);'
+        sql = 'INSERT INTO feeds(url, title, subtitle, etag, modified) VALUES(?,?,?,?,?);'
         c = db.cursor()
-        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, raw, etag, modified))
+        c.execute(sql, (url, rss.feed.title, rss.feed.subtitle, etag, modified))
         f = Feed(c.lastrowid)
+        f._rss = rss
         f._update_episodes()
         db.connection.commit()
         return f
