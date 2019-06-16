@@ -45,48 +45,6 @@ class UI(metaclass=Singleton):
         # TODO: move into SelectionList method?
         urwid.signals.emit_signal(self.feeds_list.listwalker, 'modified')
 
-
-    @classmethod
-    def runloop(cls):
-        cls.loop = urwid.MainLoop(
-            cls.main_widget,
-            cls.palette,
-            # This event loop plays nicer with vlc callbacks
-            event_loop=urwid.AsyncioEventLoop(),
-            unhandled_input=cls.handle_input,
-        )
-        cls.loop.run()
-
-    @classmethod
-    def addfeeddialogue(cls):
-        EditDialogue(
-            'Edit Test',
-            UI.loop,
-            lambda t: UI.addfeed(t),
-            attr='reversed',
-            edit_attr='normal',
-        ).display()
-
-    @classmethod
-    def addfeed(cls, url):
-        try:
-            f = Feed.add(url)
-            cls.feeds_list.add(f.title, f.id)
-        except Feed.Error as e:
-            cls.infodialogue(
-                'Error Adding Feed',
-                e.__str__(),
-            )
-
-    @classmethod
-    def infodialogue(cls, title, message):
-        InformationDialogue(
-            title,
-            message,
-            cls.loop,
-            attr='reversed',
-        ).display()
-
     @classmethod
     def _construct_feeds(cls):
         f = tuple((f.title, f.id) for f in Feed.getall())
@@ -135,6 +93,48 @@ class UI(metaclass=Singleton):
             tlcorner='─',
             trcorner='─'
         )
+
+
+    @classmethod
+    def runloop(cls):
+        cls.loop = urwid.MainLoop(
+            cls.main_widget,
+            cls.palette,
+            # This event loop plays nicer with vlc callbacks
+            event_loop=urwid.AsyncioEventLoop(),
+            unhandled_input=cls.handle_input,
+        )
+        cls.loop.run()
+
+    @classmethod
+    def addfeeddialogue(cls):
+        EditDialogue(
+            'Edit Test',
+            UI.loop,
+            lambda t: UI.addfeed(t),
+            attr='reversed',
+            edit_attr='normal',
+        ).display()
+
+    @classmethod
+    def addfeed(cls, url):
+        try:
+            f = Feed.add(url)
+            cls.feeds_list.add(f.title, f.id)
+        except Feed.Error as e:
+            cls.infodialogue(
+                'Error Adding Feed',
+                e.__str__(),
+            )
+
+    @classmethod
+    def infodialogue(cls, title, message):
+        InformationDialogue(
+            title,
+            message,
+            cls.loop,
+            attr='reversed',
+        ).display()
 
     @classmethod
     def _feeds_modified_cb(cls):
