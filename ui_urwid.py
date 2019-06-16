@@ -136,8 +136,7 @@ class UI(metaclass=Singleton):
         f = Feed(self.feeds_list.selected.data)
         self.episodes_list.display(Episode.getbyfeed(f))
 
-    @classmethod
-    def _episodes_modified_cb(cls):
+    def _episodes_modified_cb(self):
         pass
 
     @staticmethod
