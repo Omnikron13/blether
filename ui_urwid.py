@@ -2,7 +2,7 @@ from functools import reduce
 
 import urwid
 
-from singleton import Singleton
+from ui_interface import UIInterface
 from feed import Feed
 from episode import Episode
 from urwid_widgets import(
@@ -14,7 +14,7 @@ from urwid_widgets import(
 from player import Player
 
 
-class UI(metaclass=Singleton):
+class UI(UIInterface):
     palette = (
         ('normal',   'light gray', 'black',      'default'),
         ('reversed', 'black',      'light gray', 'default'),
