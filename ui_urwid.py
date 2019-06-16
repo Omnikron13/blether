@@ -22,23 +22,29 @@ class UI(metaclass=Singleton):
         ('focussed', 'black',      'light blue', 'default'),
     )
 
-    @classmethod
-    def construct(cls):
-        if hasattr(cls, 'feeds_list'):
-            return
-        cls._construct_feeds()
-        cls._construct_episodes()
-        cls._construct_information()
+    def __init__(self):
+        self.main_widget     : urwid.Widget
+        self.feeds_box       : urwid.Widget
+        self.feeds_list      : SelectionList
+        self.episodes_box    : urwid.Widget
+        self.episodes_list   : SelectionList
+        self.information_box : urwid.Widget
+        self.loop            : urwid.AsyncioEventLoop
 
-        columns = urwid.Columns((('pack', cls.feeds_box), cls.episodes_box))
-        pile = MainWidget((columns, (8, cls.information_box)))
+        self._construct_feeds()
+        self._construct_episodes()
+        self._construct_information()
 
-        cls.main_widget = pile
+        columns = urwid.Columns((('pack', self.feeds_box), self.episodes_box))
+        pile = MainWidget((columns, (8, self.information_box)))
+
+        self.main_widget = pile
 
         # Without this the episode list starts blank rather than being
         # populated from the first feed in the feeds list.
         # TODO: move into SelectionList method?
-        urwid.signals.emit_signal(cls.feeds_list.listwalker, 'modified')
+        urwid.signals.emit_signal(self.feeds_list.listwalker, 'modified')
+
 
     @classmethod
     def runloop(cls):
