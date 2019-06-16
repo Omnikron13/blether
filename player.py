@@ -17,7 +17,7 @@ class Player(metaclass=Singleton):
             self.player.set_media(media)
             self.player.play()
         else: # Assume iterable representing playlist
-            def cb(event):
+            def end_reached_cb(event):
                 # vlc callbacks aren't 'reentrant' so we have to
                 # inject the real callback into the main loop
                 def defer_cb():
@@ -28,7 +28,7 @@ class Player(metaclass=Singleton):
 
                 self.event_loop.alarm(0, defer_cb)
 
-            self.events.event_attach(vlc.EventType.MediaPlayerEndReached, cb)
+            self.events.event_attach(vlc.EventType.MediaPlayerEndReached, end_reached_cb)
             media = self.instance.media_new(playlist[0].url)
             self.player.set_media(media)
             self.player.play()
