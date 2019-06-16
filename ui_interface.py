@@ -9,5 +9,5 @@ class UIInterface(metaclass=AbstractSingleton):
         pass
 
     @abstractmethod
-    def infodialogue(self):
+    def infodialogue(self, title: str, message: str):
         pass
