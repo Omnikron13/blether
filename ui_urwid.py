@@ -45,12 +45,11 @@ class UI(metaclass=Singleton):
         # TODO: move into SelectionList method?
         urwid.signals.emit_signal(self.feeds_list.listwalker, 'modified')
 
-    @classmethod
-    def _construct_feeds(cls):
+    def _construct_feeds(self):
         f = tuple((f.title, f.id) for f in Feed.getall())
-        cls.feeds_list = SelectionList('norm', 'focussed', 'selected', f)
-        cls.feeds_box = PackableLineBox(
-            cls.feeds_list,
+        self.feeds_list = SelectionList('norm', 'focussed', 'selected', f)
+        self.feeds_box = PackableLineBox(
+            self.feeds_list,
             'Feeds',
             lline=None,
             rline=None,
@@ -60,9 +59,9 @@ class UI(metaclass=Singleton):
         )
         # Selecting a different feed needs to update the episode list
         urwid.connect_signal(
-            cls.feeds_list.listwalker,
+            self.feeds_list.listwalker,
             'modified',
-            cls._feeds_modified_cb
+            self._feeds_modified_cb
         )
 
     @classmethod
