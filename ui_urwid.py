@@ -80,9 +80,8 @@ class UI(metaclass=Singleton):
             self._episodes_modified_cb
         )
 
-    @classmethod
-    def _construct_information(cls):
-        cls.information_box = urwid.LineBox(
+    def _construct_information(self):
+        self.information_box = urwid.LineBox(
             urwid.SolidFill('~'), # TODO: replace this placeholder
             'Information',
             lline=None,
