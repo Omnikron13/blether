@@ -64,11 +64,10 @@ class UI(metaclass=Singleton):
             self._feeds_modified_cb
         )
 
-    @classmethod
-    def _construct_episodes(cls):
-        cls.episodes_list = EpisodesList('norm', 'focussed', 'selected')
-        cls.episodes_box = urwid.LineBox(
-            cls.episodes_list,
+    def _construct_episodes(self):
+        self.episodes_list = EpisodesList('norm', 'focussed', 'selected')
+        self.episodes_box = urwid.LineBox(
+            self.episodes_list,
             'Episodes',
             rline=None,
             bline=None,
@@ -76,9 +75,9 @@ class UI(metaclass=Singleton):
             trcorner='─'
         )
         urwid.connect_signal(
-            cls.episodes_list.listwalker,
+            self.episodes_list.listwalker,
             'modified',
-            cls._episodes_modified_cb
+            self._episodes_modified_cb
         )
 
     @classmethod
