@@ -92,16 +92,15 @@ class UI(metaclass=Singleton):
         )
 
 
-    @classmethod
-    def runloop(cls):
-        cls.loop = urwid.MainLoop(
-            cls.main_widget,
-            cls.palette,
+    def runloop(self):
+        self.loop = urwid.MainLoop(
+            self.main_widget,
+            self.palette,
             # This event loop plays nicer with vlc callbacks
             event_loop=urwid.AsyncioEventLoop(),
-            unhandled_input=cls.handle_input,
+            unhandled_input=self.handle_input,
         )
-        cls.loop.run()
+        self.loop.run()
 
     @classmethod
     def addfeeddialogue(cls):
