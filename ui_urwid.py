@@ -105,8 +105,8 @@ class UI(metaclass=Singleton):
     def addfeeddialogue(self):
         EditDialogue(
             'Edit Test',
-            UI.loop,
-            lambda t: UI.addfeed(t),
+            self.loop,
+            lambda t: self.addfeed(t),
             attr='reversed',
             edit_attr='normal',
         ).display()
@@ -146,15 +146,16 @@ class UI(metaclass=Singleton):
 
 class MainWidget(urwid.Pile):
     def keypress(self, size, key):
+        ui = UI()
         if key in ('q', 'esc'):
             raise urwid.ExitMainLoop
         elif key is 'a':
-            UI.addfeeddialogue()
+            ui.addfeeddialogue()
         elif key is 'p':
-            p = Player(UI.loop.event_loop)
+            p = Player(ui.loop.event_loop)
             # Play from the selected episode to the last episode
-            i = UI.episodes_list.data.index(UI.episodes_list.selected.data)
-            p.play(UI.episodes_list.data[i:])
+            i = ui.episodes_list.data.index(ui.episodes_list.selected.data)
+            p.play(ui.episodes_list.data[i:])
         else:
             return super().keypress(size, key)
 
