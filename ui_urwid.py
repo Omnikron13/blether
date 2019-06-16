@@ -102,6 +102,14 @@ class UI(UIInterface):
         )
         self.loop.run()
 
+    def infodialogue(self, title, message):
+        InformationDialogue(
+            title,
+            message,
+            self.loop,
+            attr='reversed',
+        ).display()
+
     def addfeeddialogue(self):
         EditDialogue(
             'Edit Test',
@@ -120,14 +128,6 @@ class UI(UIInterface):
                 'Error Adding Feed',
                 e.__str__(),
             )
-
-    def infodialogue(self, title, message):
-        InformationDialogue(
-            title,
-            message,
-            self.loop,
-            attr='reversed',
-        ).display()
 
     def _feeds_modified_cb(self):
         if not self.feeds_list.selected:
