@@ -11,3 +11,7 @@ class UIInterface(metaclass=AbstractSingleton):
     @abstractmethod
     def infodialogue(self, title: str, message: str):
         pass
+
+    @abstractmethod
+    def addfeeddialogue(self):
+        pass
