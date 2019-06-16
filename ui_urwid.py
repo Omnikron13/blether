@@ -102,8 +102,7 @@ class UI(metaclass=Singleton):
         )
         self.loop.run()
 
-    @classmethod
-    def addfeeddialogue(cls):
+    def addfeeddialogue(self):
         EditDialogue(
             'Edit Test',
             UI.loop,
