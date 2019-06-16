@@ -121,12 +121,11 @@ class UI(metaclass=Singleton):
                 e.__str__(),
             )
 
-    @classmethod
-    def infodialogue(cls, title, message):
+    def infodialogue(self, title, message):
         InformationDialogue(
             title,
             message,
-            cls.loop,
+            self.loop,
             attr='reversed',
         ).display()
 
