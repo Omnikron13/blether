@@ -111,13 +111,12 @@ class UI(metaclass=Singleton):
             edit_attr='normal',
         ).display()
 
-    @classmethod
-    def addfeed(cls, url):
+    def addfeed(self, url):
         try:
             f = Feed.add(url)
-            cls.feeds_list.add(f.title, f.id)
+            self.feeds_list.add(f.title, f.id)
         except Feed.Error as e:
-            cls.infodialogue(
+            self.infodialogue(
                 'Error Adding Feed',
                 e.__str__(),
             )
