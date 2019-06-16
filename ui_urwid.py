@@ -129,13 +129,12 @@ class UI(metaclass=Singleton):
             attr='reversed',
         ).display()
 
-    @classmethod
-    def _feeds_modified_cb(cls):
-        if not cls.feeds_list.selected:
+    def _feeds_modified_cb(self):
+        if not self.feeds_list.selected:
             return
         # TODO: add support for special non-id entries (like e.g. 'All')
-        f = Feed(cls.feeds_list.selected.data)
-        cls.episodes_list.display(Episode.getbyfeed(f))
+        f = Feed(self.feeds_list.selected.data)
+        self.episodes_list.display(Episode.getbyfeed(f))
 
     @classmethod
     def _episodes_modified_cb(cls):
